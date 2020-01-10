@@ -48,7 +48,7 @@ This is the typical problem that might finely showcase both the candidate comman
 
 In our approach we will try to follow this path, starting with the easiest case (the number is composed only of a small number of digits) and then moving on to tackle more challenging inputs.
 
-### First step
+### First step - parsing just digits
 
 Parsing the input one character at a time:
 
@@ -107,5 +107,38 @@ res = 87 * 10 + `6` - 48; // equals 876, since the product gives 6 and the value
 c == '4';
 res = 8765123 * 10 + `4` - 48; // equals 87651234, since the product gives 4 and the value of c in ASCII code is 52
 ```
+
+Notice that this approach allows us to keep a **O(1)** space complexity, without the need to store intermediate values in vectors or arrays, delivering good performance just incrementing our result variable at each step.
+
+Now, with the main part of our solution mostly done, we can focus on getting the next crucial step - handling the sign.
+
+### Second Step - the Sign
+
+Now things start to get a bit more complicated and we need to take into account the sign; one of the best approaches is probably to store the sign in another variable; you might use confidently a boolean for now in order to store this value. Later on we might change our pattern in order to more elegantly handly a few more edge cases.
+
+So, updating our previous code, we add some conditional flow inside our loops and a final condition at the very last line - the `return` statement:
+
+```cpp
+class Solution {
+public:
+    int myAtoi(string str) {
+        int res = 0;
+        bool isPositive = true; // defaulting to positive values, when no sign is provided
+        for (char c: str) {
+            if (c > 47 && c < 58) { // this is the range for numerical characters, as shown in the above reference
+                res = res * 10 + c - 48;
+            }
+            else if (c == 43 || c == 45) { // this checks if the character is either a plus (+) or a minus (-)
+                isPositive = c == '+';
+            }
+        }
+        return isPositive ? res : -res;
+    }
+};
+```
+
+Ok, almost done and we managed to keep our logic rather clean and performing. Notice that our solution also works for some cases that are not purely numerical, as white spaces or other characters are just ignored.
+
+The last step, regrettably, will add some more complication that we deserves a more detailed discussion.
 
 From https://leetcode.com/problems/string-to-integer-atoi/
