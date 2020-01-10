@@ -141,4 +141,55 @@ Ok, almost done and we managed to keep our logic rather clean and performing. No
 
 The last step, regrettably, will add some more complication that we deserves a more detailed discussion.
 
+### Third Step - Fine Tuning for Edge Cases.
+
+For this final round of adjustments, let's proceed in reverse: we want to start first showing our working solution and then analysing some of the choices we made - keeping clear in mind that this is by no means the sole, perfect way to solve this problem:
+
+```cpp
+class Solution {
+public:
+    int myAtoi(string str) {
+        long res = 0;
+        char sign = ' ';
+        for (char c: str) {
+            if (c > 47 && c < 58) {
+                res = res * 10 + c - 48;
+                if (sign == ' ') sign = '+';
+                if (res > INT_MAX && sign != '-') return INT_MAX;
+                else if (-res < INT_MIN) return INT_MIN;
+            }
+            else if (c == 43 || c == 45) {
+                // exiting the loop in case we already read a sign
+                if (sign != ' ') break;
+                sign = c;
+            }
+            else if (c == 32) {
+                // apparently we do not accept spaces *after* reading the first sign
+                if (sign != ' ') break;
+            }
+            else break;
+        }
+        return sign != '-' ? res : -res;
+    }
+};
+```
+
+Now, the first thing you might have noticed is that we changed `res` from being an `int` to a `long` value: we did so in order to accommodate for larger values, without checking for very specific values on a step-by-step basis or wrapping everything in a [try block](https://en.cppreference.com/w/cpp/language/try_catch), a structure that has a reputation for being frequently abused and that not every interviewer might like as your own designed approach.
+
+We also decided to change the `bool` variable `isPositive` to the `char` `sign` value - again, this is not necessarily the best approach, just one that we found more convenient handling more complex cases and thus having to store information about the sign that is not just binary.
+
+Inside our first condition, we added a few more nested pieces of logic: first of all we set the sign to positive as soon as we find our first number - without doing that, we would not pass a few test cases that are tricky to otherwise figure out, giving you numbers followed by one or more signs; we also check for potential overflows as soon as they might appear, exiting the loop and returning the capped at `INT_MAX` and `INT_MIN` respectively.
+
+The conditional part we added in step 2 now needs also a special case more than one sign is provided - in which case we `break` and return the current value of `res`.
+
+Similarly, we added an extra case for when a space follows a previously recorded sign, in which case we `break` out of the loop to return our signed `res`.
+
+Finally, in case the character is anything else (like letters or special characters), we behave like in the previous 2 cases.
+
+### Complexity Analysis
+
+This solution allows us to keep the time complexity to **O(n)**, with `n` being the number of characters in the string we are provided.
+
+Space complexity is constant, as we mentioned, requiring only **O(1)** space to compute the final result.
+
 From https://leetcode.com/problems/string-to-integer-atoi/
