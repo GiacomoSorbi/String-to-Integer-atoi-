@@ -39,7 +39,7 @@ Explanation: The first non-whitespace character is 'w', which is not a numerical
 Input: "-91283472332"
 Output: -2147483648
 Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
-             Thefore INT_MIN (−231) is returned.
+             Therefore INT_MIN (−231) is returned.
 ```
 
 ## Solution
@@ -75,9 +75,9 @@ for (int i = 0; i < str.size(); i++) {
 }
 ```
 
-It just makes your code more concise and potentially readable, so we would rather recommend it when your code has no actual need for the index of the iterable your are currently looping.
+It just makes your code more concise and potentially readable, so we would rather recommend it when your code has no actual need for the index of the iterable you are currently looping.
 
-Back to business, our solution should appear relatively straightforward: we initalise a variable that will hold our final result (`res`) and at each iteration we proceed to take the leftmost not previously scanned digit.
+Back to business, our solution should appear relatively straightforward: we initialise a variable that will hold our final result (`res`) and at each iteration we proceed to take the leftmost not previously scanned digit.
 
 We then get its numerical value subtracting `48` (the ASCII code for the character `0`, see [here](https://en.wikipedia.org/wiki/ASCII#Printable_characters)) from it: C++ allows mathematical operations between `int`s and `char`s, sparing us the pain of creating some data structure or piece of logic to match them.
 
@@ -114,7 +114,7 @@ Now, with the main part of our solution mostly done, we can focus on getting the
 
 ### Second Step - the Sign
 
-Now things start to get a bit more complicated and we need to take into account the sign; one of the best approaches is probably to store the sign in another variable; you might use confidently a boolean for now in order to store this value. Later on we might change our pattern in order to more elegantly handly a few more edge cases.
+Now things start to get a bit more complicated and we need to take into account the sign; one of the best approaches is probably to store the sign in another variable; you might use confidently a Boolean for now in order to store this value. Later on, we might change our pattern in order to more elegantly handle a few more edge cases.
 
 So, updating our previous code, we add some conditional flow inside our loops and a final condition at the very last line - the `return` statement:
 
@@ -139,7 +139,7 @@ public:
 
 Ok, almost done and we managed to keep our logic rather clean and performing. Notice that our solution also works for some cases that are not purely numerical, as white spaces or other characters are just ignored.
 
-The last step, regrettably, will add some more complication that we deserves a more detailed discussion.
+The last step, regrettably, will add some more complication and thus deserves a more detailed discussion.
 
 ### Third Step - Fine Tuning for Edge Cases.
 
@@ -164,7 +164,7 @@ public:
                 sign = c;
             }
             else if (c == 32) {
-                // apparently we do not accept spaces *after* reading the first sign
+                // apparently, we do not accept spaces *after* reading the first sign
                 if (sign != ' ') break;
             }
             else break;
